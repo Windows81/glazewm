@@ -5,7 +5,7 @@ use crate::{
 
 pub fn resize_tiling_container(
   container_to_resize: &TilingContainer,
-  target_size: f32,
+  target_size_percent: f32,
 ) {
   let tiling_siblings =
     container_to_resize.tiling_siblings().collect::<Vec<_>>();
@@ -19,13 +19,13 @@ pub fn resize_tiling_container(
   // Prevent the container from being smaller than the minimum size, and
   // larger than the space available from sibling containers.
   #[allow(clippy::cast_precision_loss)]
-  let clamped_target_size = target_size.clamp(
+  let clamped_target_size_percent = target_size_percent.clamp(
     MIN_TILING_SIZE,
     1. - (tiling_siblings.len() as f32 * MIN_TILING_SIZE),
   );
 
-  let size_delta = clamped_target_size - container_to_resize.tiling_size();
-  container_to_resize.set_tiling_size(clamped_target_size);
+  let size_delta = clamped_target_size_percent - container_to_resize.tiling_size();
+  container_to_resize.set_tiling_size(clamped_target_size_percent);
 
   // Get available tiling size amongst siblings.
   let available_size =
