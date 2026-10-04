@@ -86,13 +86,15 @@ fn set_tiling_window_length(
     let tiling_size = target_length.to_percentage(parent_length);
 
     // Skip the resize if the window is already at the target size.
-    if container_to_resize.tiling_size() - tiling_size != 0. {
-      resize_tiling_container(&container_to_resize, tiling_size);
-
-      state
-        .pending_sync
-        .queue_containers_to_redraw(parent.tiling_children());
+    if container_to_resize.tiling_size() - tiling_size == 0. {
+      return;
     }
+    
+    resize_tiling_container(&container_to_resize, tiling_size);
+
+    state
+      .pending_sync
+      .queue_containers_to_redraw(parent.tiling_children());
   }
 
   Ok(())
